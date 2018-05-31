@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" ref="home">
     <div class="content">
       <div class="item" v-for="(item,index) of listArr">
         <div class="imgWrap">
@@ -41,33 +41,28 @@ export default {
       canBuy: true,
       canTack: false,
       loadingIsShow: false,
-      timer:null
+      timer: null
     };
   },
   mounted() {
-    const viewHeight = window.screen.height;
     // console.log("网页可见区域高", document.body.clientHeight);
     // console.log("网页可见区域高 (包括边线的高) ", document.body.offsetHeight);
     // console.log("网页正文全文高 ", document.body.scrollHeight);
     // console.log("屏幕分辨率的高 ", window.screen.height);
     // console.log("屏幕可用工作区宽度 ", window.screen.availHeight);
     window.addEventListener("scroll", () => {
-      clearTimeout(this.timer)
-      let scrollTop =
-        document.documentElement.scrollTop || document.body.scrollTop;
-      // console.log("scrollTop", scrollTop);
-      // console.log("viewHeight", viewHeight);
-      // console.log("document.body.scrollHeight", document.body.scrollHeight);
-      if (
-        parseInt(viewHeight + scrollTop) == parseInt(document.body.scrollHeight)
-      ) {
+      clearTimeout(this.timer);
+      let wScrollY = window.scrollY;
+      let wInnerH = window.innerHeight;
+      let bScrollH = document.body.scrollHeight;
+      if (wScrollY + wInnerH >= bScrollH) {
         this.loadingIsShow = true;
         this.timer = setTimeout(() => {
           this.loadingIsShow = false;
           this.listArr.push({
             imgUrl: require("../../images/3.jpg")
           });
-          console.log('add how')
+          console.log("add how");
           console.log("succ");
         }, 2000);
       }
@@ -113,12 +108,13 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.v-enter,.v-leave-to {
-  opacity:0;
+.v-enter,
+.v-leave-to {
+  opacity: 0;
 }
 .v-enter-active,
 .v-leave-active {
-  transition: opacity .5s;
+  transition: opacity 0.5s;
 }
 .loading {
   height: 50px;
